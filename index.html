@@ -1,145 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Scientific + String Calculator</title>
-  
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background: #f7f9fc;
-      font-family: Arial, sans-serif;
-    }
-    .calculator {
-      max-width: 450px;
-      margin: 40px auto;
-      padding: 20px;
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-    .display {
-      height: 60px;
-      font-size: 1.4rem;
-      text-align: right;
-      padding: 10px;
-      margin-bottom: 15px;
-      border-radius: 10px;
-      background: #f1f3f5;
-      overflow-x: auto;
-    }
-    button {
-      width: 100%;
-      height: 55px;
-      font-size: 1rem;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .calculator {
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .display {
+            background-color: #e9ecef;
+            min-height: 80px;
+            font-size: 2rem;
+            text-align: right;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+        .display-history {
+            min-height: 25px;
+            font-size: 1rem;
+            text-align: right;
+            color: #6c757d;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .btn {
+            width: 100%;
+            height: 55px;
+            font-size: 1.2rem;
+        }
+        .btn-info {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+            color: white;
+        }
+        .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: black;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+        .btn-dark {
+            background-color: #343a40;
+            border-color: #343a40;
+            color: white;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+    </style>
 </head>
 <body>
 
 <div class="calculator">
-  <div id="display" class="display">0</div>
-  <div class="container text-center">
-    
+    <div class="display-container">
+        <div class="display-history" id="display-history"></div>
+        <div id="display" class="display">0</div>
+    </div>
     
     <div class="row g-2">
-      <div class="col"><button class="btn btn-danger" onclick="clearDisplay()">C</button></div>
-      <div class="col"><button class="btn btn-secondary" onclick="backspace()">⌫</button></div>
-      <div class="col"><button class="btn btn-secondary" onclick="insert('(')">(</button></div>
-      <div class="col"><button class="btn btn-secondary" onclick="insert(')')">)</button></div>
-    </div>
-    
-    
-    <div class="row g-2 mt-2">
-      <div class="col"><button class="btn btn-light" onclick="insert('7')">7</button></div>
-      <div class="col"><button class="btn btn-light" onclick="insert('8')">8</button></div>
-      <div class="col"><button class="btn btn-light" onclick="insert('9')">9</button></div>
-      <div class="col"><button class="btn btn-warning" onclick="insert('/')">÷</button></div>
-    </div>
-    
-    
-    <div class="row g-2 mt-2">
-      <div class="col"><button class="btn btn-light" onclick="insert('4')">4</button></div>
-      <div class="col"><button class="btn btn-light" onclick="insert('5')">5</button></div>
-      <div class="col"><button class="btn btn-light" onclick="insert('6')">6</button></div>
-      <div class="col"><button class="btn btn-warning" onclick="insert('*')">×</button></div>
-    </div>
-    
-    
-    <div class="row g-2 mt-2">
-      <div class="col"><button class="btn btn-light" onclick="insert('1')">1</button></div>
-      <div class="col"><button class="btn btn-light" onclick="insert('2')">2</button></div>
-      <div class="col"><button class="btn btn-light" onclick="insert('3')">3</button></div>
-      <div class="col"><button class="btn btn-warning" onclick="insert('-')">−</button></div>
-    </div>
-    
-    
-    <div class="row g-2 mt-2">
-      <div class="col"><button class="btn btn-light" onclick="insert('0')">0</button></div>
-      <div class="col"><button class="btn btn-light" onclick="insert('.')">.</button></div>
-      <div class="col"><button class="btn btn-success" onclick="calculate()">=</button></div>
-      <div class="col"><button class="btn btn-warning" onclick="insert('+')">+</button></div>
-    </div>
-    
-    
-    <div class="row g-2 mt-2">
-      <div class="col"><button class="btn btn-info" onclick="insert('Math.sin(')">sin</button></div>
-      <div class="col"><button class="btn btn-info" onclick="insert('Math.cos(')">cos</button></div>
-      <div class="col"><button class="btn btn-info" onclick="insert('Math.tan(')">tan</button></div>
-      <div class="col"><button class="btn btn-info" onclick="insert('Math.sqrt(')">√</button></div>
+        <div class="col-3"><button class="btn btn-danger" onclick="clearDisplay()">C</button></div>
+        <div class="col-3"><button class="btn btn-secondary" onclick="backspace()"><</button></div>
+        <div class="col-3"><button class="btn btn-secondary" onclick="insert('(')">(</button></div>
+        <div class="col-3"><button class="btn btn-secondary" onclick="insert(')')">)</button></div>
     </div>
     
     <div class="row g-2 mt-2">
-      <div class="col"><button class="btn btn-info" onclick="insert('Math.log(')">log</button></div>
-      <div class="col"><button class="btn btn-info" onclick="insert('Math.exp(')">exp</button></div>
-      <div class="col"><button class="btn btn-info" onclick="insert('**')">^</button></div>
-      <div class="col"><button class="btn btn-info" onclick="insert('Math.PI')">π</button></div>
+        <div class="col-3"><button class="btn btn-light" onclick="insert('7')">7</button></div>
+        <div class="col-3"><button class="btn btn-light" onclick="insert('8')">8</button></div>
+        <div class="col-3"><button class="btn btn-light" onclick="insert('9')">9</button></div>
+        <div class="col-3"><button class="btn btn-warning" onclick="insert('/')">÷</button></div>
     </div>
-
     
-    <h6 class="mt-4">String Functions</h6>
-    <div class="row g-2 mt-1">
-      <div class="col"><button class="btn btn-dark" onclick="insert('\"hello\".length')">length</button></div>
-      <div class="col"><button class="btn btn-dark" onclick="insert('\"hello\".toUpperCase()')">upper</button></div>
-      <div class="col"><button class="btn btn-dark" onclick="insert('\"HELLO\".toLowerCase()')">lower</button></div>
-      <div class="col"><button class="btn btn-dark" onclick="insert('\"hello\"+\"world\"')">concat</button></div>
-    </div>
     <div class="row g-2 mt-2">
-      <div class="col"><button class="btn btn-dark" onclick="insert('\"hello\".charAt(1)')">charAt</button></div>
-      <div class="col"><button class="btn btn-dark" onclick="insert('\"hello\".includes(\"e\")')">includes</button></div>
-      <div class="col"><button class="btn btn-dark" onclick="insert('\"hello\".slice(1,4)')">slice</button></div>
-      <div class="col"><button class="btn btn-dark" onclick="insert('\"hello\".replace(\"h\",\"H\")')">replace</button></div>
+        <div class="col-3"><button class="btn btn-light" onclick="insert('4')">4</button></div>
+        <div class="col-3"><button class="btn btn-light" onclick="insert('5')">5</button></div>
+        <div class="col-3"><button class="btn btn-light" onclick="insert('6')">6</button></div>
+        <div class="col-3"><button class="btn btn-warning" onclick="insert('*')">*</button></div>
     </div>
-  </div>
+    
+    <div class="row g-2 mt-2">
+        <div class="col-3"><button class="btn btn-light" onclick="insert('1')">1</button></div>
+        <div class="col-3"><button class="btn btn-light" onclick="insert('2')">2</button></div>
+        <div class="col-3"><button class="btn btn-light" onclick="insert('3')">3</button></div>
+        <div class="col-3"><button class="btn btn-warning" onclick="insert('-')">-</button></div>
+    </div>
+    
+    <div class="row g-2 mt-2">
+        <div class="col-3"><button class="btn btn-light" onclick="insert('0')">0</button></div>
+        <div class="col-3"><button class="btn btn-light" onclick="insert('.')">.</button></div>
+        <div class="col-3"><button class="btn btn-success" onclick="calculate()">=</button></div>
+        <div class="col-3"><button class="btn btn-warning" onclick="insert('+')">+</button></div>
+    </div>
+    
+    <h6 class="mt-3 text-muted text-center">Scientific Functions</h6>
+    <div class="row g-2 mt-2">
+        <div class="col-3"><button class="btn btn-info" onclick="scientificFunction('sin')">sin</button></div>
+        <div class="col-3"><button class="btn btn-info" onclick="scientificFunction('cos')">cos</button></div>
+        <div class="col-3"><button class="btn btn-info" onclick="scientificFunction('tan')">tan</button></div>
+        <div class="col-3"><button class="btn btn-info" onclick="scientificFunction('sqrt')">√</button></div>
+    </div>
+    
+    <div class="row g-2 mt-2">
+        <div class="col-3"><button class="btn btn-info" onclick="scientificFunction('log')">log</button></div>
+        <div class="col-3"><button class="btn btn-info" onclick="scientificFunction('ln')">ln</button></div>
+        <div class="col-3"><button class="btn btn-info" onclick="insert('**')">^</button></div>
+        <div class="col-3"><button class="btn btn-info" onclick="insert('Math.PI')">π</button></div>
+    </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  let display = document.getElementById("display");
-
-  function insert(value) {
-    if (display.innerText === "0") {
-      display.innerText = value;
-    } else {
-      display.innerText += value;
+    
+    let display = document.getElementById("display");
+    let displayHistory = document.getElementById("display-history");
+    
+    
+    let currentValue = "0";
+    let isNewCalculation = true;
+    
+    
+    function updateDisplay(value) {
+        if (value.toString().length > 12) {
+            display.innerText = parseFloat(value).toExponential(5);
+        } else {
+            display.innerText = value;
+        }
+        currentValue = display.innerText;
     }
-  }
-
-  function clearDisplay() {
-    display.innerText = "0";
-  }
-
-  function backspace() {
-    display.innerText = display.innerText.slice(0, -1) || "0";
-  }
-
-  function calculate() {
-    try {
-      display.innerText = eval(display.innerText);
-    } catch {
-      display.innerText = "Error";
+    
+    function updateHistory(value) {
+        displayHistory.innerText = value;
     }
-  }
+    
+    
+
+
+
+    function insert(value) {
+        if (isNewCalculation || currentValue === "0") {
+            display.innerText = value;
+            isNewCalculation = false;
+        } else {
+            display.innerText += value;
+        }
+        currentValue = display.innerText;
+    }
+    
+    function clearDisplay() {
+        display.innerText = "0";
+        currentValue = "0";
+        updateHistory("");
+        isNewCalculation = true;
+    }
+    
+    function backspace() {
+        if (currentValue.length > 1) {
+            display.innerText = currentValue.slice(0, -1);
+            currentValue = display.innerText;
+        } else {
+            display.innerText = "0";
+            currentValue = "0";
+        }
+    }
+    
+    
+    function calculate() {
+        try {
+            let expression = currentValue;
+            
+            
+            expression = expression.replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-').replace(/π/g, 'Math.PI');
+            
+            
+            let result = eval(expression);
+            
+            
+            updateHistory(currentValue + " =");
+            updateDisplay(result);
+            
+            isNewCalculation = true;
+        } catch (error) {
+            updateDisplay("Error");
+            setTimeout(() => updateDisplay("0"), 1500);
+        }
+    }
+    
+
+
+
+    // Scientific functions
+    function scientificFunction(func) {
+        try {
+            let expression = currentValue;
+            let result;
+            
+            switch(func) {
+                case 'sin':
+                    result = Math.sin(eval(expression));
+                    break;
+                case 'cos':
+                    result = Math.cos(eval(expression));
+                    break;
+                case 'tan':
+                    result = Math.tan(eval(expression));
+                    break;
+                case 'sqrt':
+                    result = Math.sqrt(eval(expression));
+                    break;
+                case 'log':
+                    result = Math.log10(eval(expression));
+                    break;
+                case 'ln':
+                    result = Math.log(eval(expression));
+                    break;
+            }
+            
+            updateHistory(func + "(" + expression + ")");
+            updateDisplay(result);
+            isNewCalculation = true;
+        } catch (error) {
+            updateDisplay("Error");
+            setTimeout(() => updateDisplay("0"), 1500);
+        }
+    }
+    
+
+
+    document.addEventListener('keydown', function(event) {
+        if (/[0-9]/.test(event.key)) {
+            insert(event.key);
+        } else if (event.key === '+') {
+            insert('+');
+        } else if (event.key === '-') {
+            insert('-');
+        } else if (event.key === '*') {
+            insert('*');
+        } else if (event.key === '/') {
+            insert('/');
+        } else if (event.key === '.') {
+            insert('.');
+        } else if (event.key === '(') {
+            insert('(');
+        } else if (event.key === ')') {
+            insert(')');
+        } else if (event.key === 'Enter' || event.key === '=') {
+            calculate();
+        } else if (event.key === 'Escape') {
+            clearDisplay();
+        } else if (event.key === 'Backspace') {
+            backspace();
+        }
+    });
 </script>
 
 </body>
